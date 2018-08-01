@@ -12,6 +12,7 @@ using GroupDocs.Signature.Handler.Output;
 using GroupDocs.Signature.Domain;
 using System.Drawing;
 using System.Drawing.Imaging;
+using GroupDocs.Signature.Domain.Extensions;
 
 namespace GroupDocs.Signature.Examples.CSharp
 {
@@ -149,6 +150,185 @@ namespace GroupDocs.Signature.Examples.CSharp
             //ExEnd:signingandsavingworddocumentwithtext
         }
 
+        /// <summary>
+        /// Signing a slide document with text using TextShadow Extension
+        /// Feature is supported by version 18.1.1 or greater
+        /// </summary>
+        /// <param name="fileName">Name of the input file</param>
+        public static void SignSlideDocumentWithTextShadowExtension(string fileName)
+        {
+            //ExStart:SignSlideDocumentWithTextShadowExtension
+            SignatureConfig config = Utilities.GetConfigurations();
+            // instantiating the signature handler
+            SignatureHandler handler = new SignatureHandler(config);
+
+            // set up text signature options
+            SlidesSignTextOptions signOptions = new SlidesSignTextOptions("John Smith");
+            signOptions.Width = 300;
+            signOptions.Height = 300;
+            signOptions.Font.FontSize = 48;
+
+            // set up shadow options for text
+            TextShadow shadow = new TextShadow();
+            shadow.Color = Color.OrangeRed;
+            shadow.Angle = 135;
+            shadow.Blur = 5;
+            shadow.Distance = 4;
+            shadow.Transparency = 0.2;
+
+            //add text shadow to signature extensions
+            signOptions.Extensions.Add(shadow);
+
+            // sign document
+            string signedPath = handler.Sign<string>(fileName, signOptions,
+                new SaveOptions { OutputType = OutputType.String, OutputFileName = "SignatureExtensions_TextShadow" });
+            Console.WriteLine("Signed file path is: " + signedPath);
+            //ExEnd:SignSlideDocumentWithTextShadowExtension
+        }
+
+        /// <summary>
+        /// Shows how to sign Cell document by setting position of Text signature in pixel 
+        /// Feature is supported in version 18.6 or greater
+        /// </summary>
+        /// <param name="fileName"></param>
+        public static void SetTextSignaturePositionOnCells(string fileName)
+        {
+            //ExStart:SetTextSignaturePositionOnCells
+            // setup Signature configuration
+            SignatureConfig signConfig = Utilities.GetConfigurations();
+            // instantiating the conversion handler
+            SignatureHandler handler = new SignatureHandler(signConfig);
+
+            // Specify Signature Options 
+            CellsSignTextOptions signOptions = new CellsSignTextOptions("John Smith");
+            signOptions.Width = 100;
+            signOptions.Height = 100;
+            signOptions.Top = 15;
+            signOptions.Left = 22;
+            // sign document
+            string signedPath = handler.Sign<string>(fileName, signOptions,
+                new SaveOptions { OutputType = OutputType.String, OutputFileName = "CellsTopLeftPixels" });
+            Console.WriteLine("Signed file path is: " + signedPath);
+            //ExEnd:SetTextSignaturePositionOnCells
+        }
+
+        /// <summary>
+        /// Shows how to sign Cell document with alignment of Text inside Text Signature
+        /// Feature is supported in version 18.6 or greater
+        /// </summary>
+        /// <param name="fileName"></param>
+        public static void AlignTextSignaturePositionOnCells(string fileName)
+        {
+            //ExStart:AlignTextSignaturePositionOnCells
+            // setup Signature configuration
+            SignatureConfig signConfig = Utilities.GetConfigurations();
+            // instantiating the conversion handler
+            SignatureHandler handler = new SignatureHandler(signConfig);
+
+            // setup options with text of signature
+            CellsSignTextOptions signOptions = new CellsSignTextOptions("John Smith");
+
+            // text rectangle size
+            signOptions.Height = 100;
+            signOptions.Width = 100;
+
+            // set text alignment inside signature (This feature is supported starting from version 18.06)
+            signOptions.TextHorizontalAlignment = TextHorizontalAlignment.Center;
+            signOptions.TextVerticalAlignment = TextVerticalAlignment.Center;
+
+            // sign document
+            string signedPath = handler.Sign<string>(fileName, signOptions,
+                new SaveOptions { OutputType = OutputType.String, OutputFileName = "Cells_AlignTextInTextSignature" });
+            Console.WriteLine("Signed file path is: " + signedPath);
+            //ExEnd:AlignTextSignaturePositionOnCells
+        }
+
+        /// <summary>
+        /// Shows how to sign PDF with alignment of Text inside Text Signature
+        /// Feature is supported in version 18.6 or greater
+        /// </summary>
+        /// <param name="fileName"></param>
+        public static void AlignTextSignaturePositionOnPDF(string fileName)
+        {
+            //ExStart:AlignTextSignaturePositionOnPDF
+            // setup Signature configuration
+            SignatureConfig signConfig = Utilities.GetConfigurations();
+            // instantiating the conversion handler
+            SignatureHandler handler = new SignatureHandler(signConfig);
+
+            // setup text signature options
+            PdfSignTextOptions signOptions = new PdfSignTextOptions("John Smith");
+            // text rectangle size
+            signOptions.Height = 100;
+            signOptions.Width = 100;
+            //type of implementation
+            signOptions.SignatureImplementation = PdfTextSignatureImplementation.Image;
+            // set text alignment inside signature (This feature is supported starting from version 18.06)
+            signOptions.TextHorizontalAlignment = TextHorizontalAlignment.Center;
+            signOptions.TextVerticalAlignment = TextVerticalAlignment.Center;
+            // sign document
+            string signedPath = handler.Sign<string>(fileName, signOptions,
+                new SaveOptions { OutputType = OutputType.String, OutputFileName = "Pdf_AlignTextInTextSignature" });
+            Console.WriteLine("Signed file path is: " + signedPath);
+            //ExEnd:AlignTextSignaturePositionOnPDF
+        }
+
+        /// <summary>
+        /// Shows how to sign Slide document with alignment of Text inside Text Signature
+        /// Feature is supported in version 18.6 or greater
+        /// </summary>
+        /// <param name="fileName"></param>
+        public static void AlignTextSignaturePositionOnSlides(string fileName)
+        {
+            //ExStart:AlignTextSignaturePositionOnSlides
+            // setup Signature configuration
+            SignatureConfig signConfig = Utilities.GetConfigurations();
+            // instantiating the conversion handler
+            SignatureHandler handler = new SignatureHandler(signConfig);
+
+            // setup text signature options
+            SlidesSignTextOptions signOptions = new SlidesSignTextOptions("John Smith");
+            signOptions.Width = 100;
+            signOptions.Height = 100;
+            // set text alignment inside signature (This feature is supported starting from version 18.06)
+            signOptions.TextHorizontalAlignment = TextHorizontalAlignment.Center;
+            signOptions.TextVerticalAlignment = TextVerticalAlignment.Center;
+            // sign document
+            string signedPath = handler.Sign<string>(fileName, signOptions,
+                new SaveOptions { OutputType = OutputType.String, OutputFileName = "Slides_AlignTextInTextSignature" });
+            Console.WriteLine("Signed file path is: " + signedPath);
+            //ExEnd:AlignTextSignaturePositionOnSlides
+        }
+
+        /// <summary>
+        /// Shows how to sign Word document with alignment of Text inside Text Signature
+        /// Feature is supported in version 18.6 or greater
+        /// </summary>
+        /// <param name="fileName"></param>
+        public static void AlignTextSignaturePositionOnWords(string fileName)
+        {
+            //ExStart:AlignTextSignaturePositionOnWords
+            // setup Signature configuration
+            SignatureConfig signConfig = Utilities.GetConfigurations();
+            // instantiating the conversion handler
+            SignatureHandler handler = new SignatureHandler(signConfig);
+
+            // setup text signature options
+            WordsSignTextOptions signOptions = new WordsSignTextOptions("John Smith");
+            signOptions.Width = 100;
+            signOptions.Height = 100;
+            // type of implementation
+            signOptions.SignatureImplementation = WordsTextSignatureImplementation.TextAsImage;
+            // set text alignment inside signature (This feature is supported starting from version 18.06)
+            signOptions.TextHorizontalAlignment = TextHorizontalAlignment.Center;
+            signOptions.TextVerticalAlignment = TextVerticalAlignment.Center;
+            // sign document
+            string signedPath = handler.Sign<string>(fileName, signOptions,
+                new SaveOptions { OutputType = OutputType.String, OutputFileName = "Words_AlignTextInTextSignature" });
+            Console.WriteLine("Signed file path is: " + signedPath);
+            //ExEnd:AlignTextSignaturePositionOnWords
+        }
+
         #endregion
 
         #region WorkingWithImageSignature
@@ -278,6 +458,31 @@ namespace GroupDocs.Signature.Examples.CSharp
             //ExEnd:SetOpacityImageSignature
         }
 
+        /// <summary>
+        /// Shows how to sign Cell document by setting position of Image signature in pixel 
+        /// Feature is supported in version 18.6 or greater
+        /// </summary>
+        /// <param name="fileName"></param>
+        public static void SetImageSignaturePositionOnCells(string fileName)
+        {
+            //ExStart:SetImageSignaturePositionOnCells
+            // setup Signature configuration
+            SignatureConfig signConfig = Utilities.GetConfigurations();
+            // instantiating the conversion handler
+            SignatureHandler handler = new SignatureHandler(signConfig);
+
+            // Specify Signature Options 
+            CellsSignImageOptions signOptions = new CellsSignImageOptions("signature.jpg");
+            signOptions.Width = 200;
+            signOptions.Height = 200;
+            signOptions.Top = 15;
+            signOptions.Left = 22;
+            // sign document
+            string signedPath = handler.Sign<string>(fileName, signOptions,
+                new SaveOptions { OutputType = OutputType.String, OutputFileName = "CellsTopLeftPixels" });
+            Console.WriteLine("Signed file path is: " + signedPath);
+            //ExEnd:SetImageSignaturePositionOnCells
+        }
         #endregion
 
         #region WorkingWithDigitalSignatures
@@ -460,7 +665,7 @@ namespace GroupDocs.Signature.Examples.CSharp
                     OutputFileName = "SignatureLineCells"
                 });
             //ExEnd:SignCellDocumentDigitallywithSignatureAppearance
-        }
+        }        
 
         /// <summary>
         /// Specify different Stretch mode to locate Signature Area along page width or height
@@ -515,6 +720,34 @@ namespace GroupDocs.Signature.Examples.CSharp
                 });
             //ExEnd:SignPDFDocumentwithStretchMode
         }
+
+        /// <summary>
+        /// Shows how to sign Cell document by setting position of Digital signature in pixel 
+        /// Feature is supported in version 18.6 or greater
+        /// </summary>
+        /// <param name="fileName"></param>
+        public static void SetDigitalSignaturePositionOnCells(string fileName)
+        {
+            //ExStart:SetDigitalSignaturePositionOnCells
+            // setup Signature configuration
+            SignatureConfig signConfig = Utilities.GetConfigurations();
+            // instantiating the conversion handler
+            SignatureHandler handler = new SignatureHandler(signConfig);
+           // Stream certificateStream = new FileStream("ali.pfx", FileMode.Open);
+            // Specify Signature Options 
+            CellsSignDigitalOptions signOptions = new CellsSignDigitalOptions("ali.pfx", "signature.jpg");
+            //signOptions.Password = "1234567890";
+            signOptions.Width = 200;
+            signOptions.Height = 200;
+            signOptions.Top = 15;
+            signOptions.Left = 22;
+            // sign document
+            string signedPath = handler.Sign<string>(fileName, signOptions,
+                new SaveOptions { OutputType = OutputType.String, OutputFileName = "CellsTopLeftPixels" });
+            Console.WriteLine("Signed file path is: " + signedPath);
+            //ExEnd:SetDigitalSignaturePositionOnCells
+        }
+
 
         #endregion
 
@@ -1870,6 +2103,30 @@ namespace GroupDocs.Signature.Examples.CSharp
             //ExEnd:GetDocumentInfo
         }
 
+        /// <summary>
+        /// Shows how to obtain information about documents when documents provided by URL
+        /// Feature is supported in version 18.1 or greater
+        /// </summary>
+        public static void GetDocumentInfoFromURL()
+        {
+            //ExStart:GetDocumentInfoFromURL
+            // setup Signature configuration
+            SignatureConfig signConfig = Utilities.GetConfigurations();
+            // instantiating the conversion handler
+            SignatureHandler handler = new SignatureHandler(signConfig);
+            // Document description
+            DocumentDescription docInfo = handler.GetDocumentDescription(@"https://www.dropbox.com/s/bzx1xm68zd0c910/PieChart.docx?dl=1");
+            Console.WriteLine("Document " + docInfo.Guid + " contains " + docInfo.PageCount + " pages");
+            Console.WriteLine("File format is " + docInfo.FileFormat);
+            Console.WriteLine("File extension is  " + docInfo.Extension);
+            Console.WriteLine("Date created is " + docInfo.DateCreated);
+            Console.WriteLine("Date modified is " + docInfo.DateModified);
+            Console.WriteLine("Password to open file is " + docInfo.Password);
+            Console.WriteLine("File size in bytes is " + docInfo.Size);
+            Console.WriteLine("Width of first page is " + docInfo.Pages.FirstOrDefault().Width);
+            //ExEnd:GetDocumentInfoFromURL
+        }
+
         #region working with barcode signatures
         /// <summary>
         /// Shows how to use bar code types in sign options
@@ -2214,6 +2471,250 @@ namespace GroupDocs.Signature.Examples.CSharp
             //ExEnd:SetInnerMarginAndTextAlignmentsForBarcodeSignature
         }
 
+        /// <summary>
+        /// Shows how to search  barcode signatures in PDF document
+        /// This feature is availabale in version 18.2 or greater
+        /// </summary>
+        /// <param name="fileName"></param>
+        public static void SearchBarCodeSignaturesInPDF(string fileName)
+        {
+            //ExStart:SearchBarCodeSignaturesInPDF
+            // setup Signature configuration
+            SignatureConfig signConfig = Utilities.GetConfigurations();
+            // instantiating the conversion handler
+            SignatureHandler handler = new SignatureHandler(signConfig);
+            // setup search options
+            PdfSearchBarcodeOptions searchOptions = new PdfSearchBarcodeOptions();
+            // search only page with specified number
+            searchOptions.DocumentPageNumber = 1;
+            // specify as true to search all pages of a document
+            searchOptions.SearchAllPages = false;
+            // specify different pages to search
+            searchOptions.PagesSetup.FirstPage = true;
+            searchOptions.PagesSetup.LastPage = true;
+            searchOptions.PagesSetup.OddPages = true;
+            searchOptions.PagesSetup.EvenPages = true;
+            // specify barcode type to search only special encode type
+            searchOptions.EncodeType = BarcodeTypes.Code39Standard;
+            // specify barcode text to search
+            searchOptions.Text = "12345678";
+            // specify text math type
+            searchOptions.MatchType = TextMatchType.Contains;
+            // search document
+            SearchResult result = handler.Search(fileName, searchOptions);
+            // output signatures
+            foreach (BaseSignature signature in result.Signatures)
+            {
+                BarcodeSignature bcSignature = signature as BarcodeSignature;
+                if (bcSignature != null)
+                {
+                    Console.WriteLine("Found Barcode signature: {0} with text {1}", bcSignature.EncodeType.TypeName, bcSignature.Text);
+                }
+            }
+            
+            Console.WriteLine("Ending Signature Found");
+            
+            //ExEnd:SearchBarCodeSignaturesInPDF
+        }
+
+
+        /// <summary>
+        /// Shows how to search  barcode signatures in cells document
+        /// This feature is availabale in version 18.2 or greater
+        /// </summary>
+        /// <param name="fileName"></param>
+        public static void SearchBarCodeSignaturesInCells(string fileName)
+        {
+            //ExStart:SearchBarCodeSignaturesInCells
+            // setup Signature configuration
+            SignatureConfig signConfig = Utilities.GetConfigurations();
+            // instantiating the conversion handler
+            SignatureHandler handler = new SignatureHandler(signConfig);
+            // setup search options
+            CellsSearchBarcodeOptions searchOptions = new CellsSearchBarcodeOptions();
+            // search only page with specified number
+            searchOptions.DocumentPageNumber = 1;
+            // specify as true to search all pages of a document
+            searchOptions.SearchAllPages = false;
+            // specify different pages to search
+            searchOptions.PagesSetup.FirstPage = true;
+            searchOptions.PagesSetup.LastPage = true;
+            searchOptions.PagesSetup.OddPages = true;
+            searchOptions.PagesSetup.EvenPages = true;
+            // specify barcode type to search only special encode type
+            searchOptions.EncodeType = BarcodeTypes.Code39Standard;
+            // specify barcode text to search
+            searchOptions.Text = "12345678";
+            // specify text math type
+            searchOptions.MatchType = TextMatchType.Contains;
+            // search document
+            SearchResult result = handler.Search(fileName, searchOptions);
+            // output signatures
+            foreach (BaseSignature signature in result.Signatures)
+            {
+                BarcodeSignature bcSignature = signature as BarcodeSignature;
+                if (bcSignature != null)
+                {
+                    Console.WriteLine("Found Barcode signature: {0} with text {1}", bcSignature.EncodeType.TypeName, bcSignature.Text);
+                }
+            }
+            //ExEnd:SearchBarCodeSignaturesInCells
+        }
+
+        /// <summary>
+        /// Shows how to search  barcode signatures in images
+        /// This feature is availabale in version 18.2 or greater
+        /// </summary>
+        /// <param name="fileName"></param>
+        public static void SearchBarCodeSignaturesInImages(string fileName)
+        {
+            //ExStart:SearchBarCodeSignaturesInImages
+            // setup Signature configuration
+            SignatureConfig signConfig = Utilities.GetConfigurations();
+            // instantiating the conversion handler
+            SignatureHandler handler = new SignatureHandler(signConfig);
+            // setup search options
+            ImagesSearchBarcodeOptions searchOptions = new ImagesSearchBarcodeOptions();
+            // search only page with specified number
+            searchOptions.DocumentPageNumber = 1;
+            // specify as true to search all pages of a document
+            searchOptions.SearchAllPages = false;
+            // specify different pages to search
+            searchOptions.PagesSetup.FirstPage = true;
+            searchOptions.PagesSetup.LastPage = true;
+            searchOptions.PagesSetup.OddPages = true;
+            searchOptions.PagesSetup.EvenPages = true;
+            // specify barcode type to search only special encode type
+            searchOptions.EncodeType = BarcodeTypes.Code39Standard;
+            // specify barcode text to search
+            searchOptions.Text = "12345678";
+            // specify text math type
+            searchOptions.MatchType = TextMatchType.Contains;
+            // search document
+            SearchResult result = handler.Search(fileName, searchOptions);
+            // output signatures
+            foreach (BaseSignature signature in result.Signatures)
+            {
+                BarcodeSignature bcSignature = signature as BarcodeSignature;
+                if (bcSignature != null)
+                {
+                    Console.WriteLine("Found Barcode signature: {0} with text {1}", bcSignature.EncodeType.TypeName, bcSignature.Text);
+                }
+            }
+            //ExEnd:SearchBarCodeSignaturesInImages
+        }
+
+        /// <summary>
+        /// Shows how to search  barcode signatures in slides document
+        /// This feature is availabale in version 18.2 or greater
+        /// </summary>
+        /// <param name="fileName"></param>
+        public static void SearchBarCodeSignaturesInSlides(string fileName)
+        {
+            //ExStart:SearchBarCodeSignaturesInSlides
+            // setup Signature configuration
+            SignatureConfig signConfig = Utilities.GetConfigurations();
+            // instantiating the conversion handler
+            SignatureHandler handler = new SignatureHandler(signConfig);
+            // setup search options
+            SlidesSearchBarcodeOptions searchOptions = new SlidesSearchBarcodeOptions();
+            // search only page with specified number
+            searchOptions.DocumentPageNumber = 1;
+            // specify as true to search all pages of a document
+            searchOptions.SearchAllPages = false;
+            // specify different pages to search
+            searchOptions.PagesSetup.FirstPage = true;
+            searchOptions.PagesSetup.LastPage = true;
+            searchOptions.PagesSetup.OddPages = true;
+            searchOptions.PagesSetup.EvenPages = true;
+            // specify barcode type to search only special encode type
+            searchOptions.EncodeType = BarcodeTypes.Code39Standard;
+            // specify barcode text to search
+            searchOptions.Text = "12345678";
+            // specify text math type
+            searchOptions.MatchType = TextMatchType.Contains;
+            // search document
+            SearchResult result = handler.Search(fileName, searchOptions);
+            // output signatures
+            foreach (BaseSignature signature in result.Signatures)
+            {
+                BarcodeSignature bcSignature = signature as BarcodeSignature;
+                if (bcSignature != null)
+                {
+                    Console.WriteLine("Found Barcode signature: {0} with text {1}", bcSignature.EncodeType.TypeName, bcSignature.Text);
+                }
+            }
+            //ExEnd:SearchBarCodeSignaturesInSlides
+        }
+
+        /// <summary>
+        /// Shows how to search  barcode signatures in words document
+        /// This feature is availabale in version 18.2 or greater
+        /// </summary>
+        /// <param name="fileName"></param>
+        public static void SearchBarCodeSignaturesInWords(string fileName)
+        {
+            //ExStart:SearchBarCodeSignaturesInWords
+            // setup Signature configuration
+            SignatureConfig signConfig = Utilities.GetConfigurations();
+            // instantiating the conversion handler
+            SignatureHandler handler = new SignatureHandler(signConfig);
+            // setup search options
+            WordsSearchBarcodeOptions searchOptions = new WordsSearchBarcodeOptions();
+            // search only page with specified number
+            searchOptions.DocumentPageNumber = 1;
+            // specify as true to search all pages of a document
+            searchOptions.SearchAllPages = false;
+            // specify different pages to search
+            searchOptions.PagesSetup.FirstPage = true;
+            searchOptions.PagesSetup.LastPage = true;
+            searchOptions.PagesSetup.OddPages = true;
+            searchOptions.PagesSetup.EvenPages = true;
+            // specify barcode type to search only special encode type
+            searchOptions.EncodeType = BarcodeTypes.Code39Standard;
+            // specify barcode text to search
+            searchOptions.Text = "12345678";
+            // specify text math type
+            searchOptions.MatchType = TextMatchType.Contains;
+            // search document
+            SearchResult result = handler.Search(fileName, searchOptions);
+            // output signatures
+            foreach (BaseSignature signature in result.Signatures)
+            {
+                BarcodeSignature bcSignature = signature as BarcodeSignature;
+                if (bcSignature != null)
+                {
+                    Console.WriteLine("Found Barcode signature: {0} with text {1}", bcSignature.EncodeType.TypeName, bcSignature.Text);
+                }
+            }
+            //ExEnd:SearchBarCodeSignaturesInWords
+        }
+
+        /// <summary>
+        /// Shows how to sign Cell document by setting position of Barcode signature in pixel 
+        /// Feature is supported in version 18.6 or greater
+        /// </summary>
+        /// <param name="fileName"></param>
+        public static void SetBarcodeSignaturePositionOnCells(string fileName)
+        {
+            //ExStart:SetBarcodeSignaturePositionOnCells
+            // setup Signature configuration
+            SignatureConfig signConfig = Utilities.GetConfigurations();
+            // instantiating the conversion handler
+            SignatureHandler handler = new SignatureHandler(signConfig);
+
+            // Specify Signature Options 
+            CellsBarcodeSignOptions signOptions = new CellsBarcodeSignOptions("1234567");
+            signOptions.Width = 300;
+            signOptions.Height = 100;
+            signOptions.Top = 15;
+            signOptions.Left = 22;
+            // sign document
+            string signedPath = handler.Sign<string>(fileName, signOptions,
+                new SaveOptions { OutputType = OutputType.String, OutputFileName = "CellsTopLeftPixels" });
+            Console.WriteLine("Signed file path is: " + signedPath);
+            //ExEnd:SetBarcodeSignaturePositionOnCells
+        }
         #endregion
 
         #region working with QR-code signatures
@@ -2561,6 +3062,668 @@ namespace GroupDocs.Signature.Examples.CSharp
             //ExEnd:SetInnerMarginsAndTextAlignmentForQRCodeSignature
         }
 
+        /// <summary>
+        /// Shows how to set custom QRCode Data
+        /// This feature is availabale in version 18.3 or greater
+        /// </summary>
+        /// <param name="fileName"></param>
+        public static void SignDocumentWithCustomQRCodeData(string fileName)
+        {
+            //ExStart:SignDocumentWithCustomQRCodeData
+            // setup Signature configuration
+            SignatureConfig signConfig = Utilities.GetConfigurations();
+            // instantiating the signature handler
+            SignatureHandler handler = new SignatureHandler(signConfig);
+
+            // setup custom object instance with required data
+            DocumentSignature docSignature = new DocumentSignature()
+            {
+                ID = Guid.NewGuid().ToString(),
+                Author = "Mr.Sherlock",
+                Signed = DateTime.Now,
+                DataFactor = 0.67M
+            };
+            // setup options
+            PdfQRCodeSignOptions signOptions = new PdfQRCodeSignOptions();
+            // QR-code type
+            signOptions.EncodeType = QRCodeTypes.QR;
+
+            // setup Data property with custom object
+            signOptions.Data = docSignature;
+            // save Options
+            SaveOptions saveOptions = new SaveOptions { OutputType = OutputType.String, OutputFileName = "CustomSignature" };
+            // sign document
+            string signedPath = handler.Sign<string>(fileName, signOptions,saveOptions);
+            Console.WriteLine("Signed file path is: " + signedPath);
+            //ExEnd:SignDocumentWithCustomQRCodeData
+        }
+
+        /// <summary>
+        /// Shows how to sign document with embedded VCard object to QR-Code Signature.
+        /// This feature is availabale in version 18.3 or greater
+        /// </summary>
+        /// <param name="fileName"></param>
+        public static void SignDocumentWithEmbeddedVCardObjectToQRCode(string fileName)
+        {
+            //ExStart:SignDocumentWithEmbeddedVCardObjectToQRCode
+            // setup Signature configuration
+            SignatureConfig signConfig = Utilities.GetConfigurations();
+            // instantiating the signature handler
+            SignatureHandler handler = new SignatureHandler(signConfig);
+
+            // Setup VCard object
+            VCard vcard = new VCard()
+            {
+                FirstName = "Sherlock",
+                MidddleName = "",
+                LastName = "Holmes",
+                Initials = "Mr.",
+                Company = "Watson Inc.",
+                JobTitle = "Detective",
+                HomePhone = "",
+                WorkPhone = "",
+                Email = "",
+                Url = "http://sherlockholmes.com/",
+                BirthDay = new DateTime(1854, 1, 6)
+            };
+            // Setup Address of Contant details
+            vcard.HomeAddress = new Address()
+            {
+                Street = "221B Baker Street",
+                City = "London",
+                State = "NW",
+                ZIP = "NW16XE",
+                Country = "England"
+            };
+            // setup options
+            PdfQRCodeSignOptions signOptions = new PdfQRCodeSignOptions();
+            // setup QR-code type and size
+            signOptions.EncodeType = QRCodeTypes.QR;
+            signOptions.Width = 200;
+            signOptions.Height = 200;
+
+            // setup Data property to VCard instance
+            signOptions.Data = vcard;
+            // setup SaveOptions
+            SaveOptions saveOptions = new SaveOptions { OutputType = OutputType.String, OutputFileName = "VCardData" };
+            // sign document
+            string signedPath = handler.Sign<string>(fileName, signOptions, saveOptions);
+            Console.WriteLine("Signed file path is: " + signedPath);
+            //ExEnd:SignDocumentWithEmbeddedVCardObjectToQRCode
+        }
+
+        /// <summary>
+        /// Shows how to sign document with embedded Email object to QR-Code Signature.
+        /// This feature is availabale in version 18.3 or greater
+        /// </summary>
+        /// <param name="fileName"></param>
+        public static void SignDocumentWithEmbeddedEmailObjectToQRCode(string fileName)
+        {
+            //ExStart:SignDocumentWithEmbeddedEmailObjectToQRCode
+            // setup Signature configuration
+            SignatureConfig signConfig = Utilities.GetConfigurations();
+            // instantiating the signature handler
+            SignatureHandler handler = new SignatureHandler(signConfig);
+
+            // Setup Email object
+            Email email = new Email()
+            {
+                Address = "watson@sherlockholmes.com",
+                Subject = "Welcome email",
+                Body = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+            };
+
+            // setup options
+            PdfQRCodeSignOptions signOptions = new PdfQRCodeSignOptions();
+            // setup QR-code type and size
+            signOptions.EncodeType = QRCodeTypes.QR;
+            signOptions.Width = 200;
+            signOptions.Height = 200;
+
+            // setup Data property to Email instance
+            signOptions.Data = email;
+            // setup SaveOptions
+            SaveOptions saveOptions = new SaveOptions { OutputType = OutputType.String, OutputFileName = "EmailData" };
+            // sign document
+            string signedPath = handler.Sign<string>(fileName, signOptions, saveOptions);
+            Console.WriteLine("Signed file path is: " + signedPath);
+            //ExEnd:SignDocumentWithEmbeddedEmailObjectToQRCode
+        }
+
+        /// <summary>
+        /// Shows how to search  QR Code signatures in PDF document
+        /// This feature is availabale in version 18.2 or greater
+        /// </summary>
+        /// <param name="fileName"></param>
+        public static void SearchQRCodeSignaturesInPDF(string fileName)
+        {
+            //ExStart:SearchQRCodeSignaturesInPDF
+            // setup Signature configuration
+            SignatureConfig signConfig = Utilities.GetConfigurations();
+            // instantiating the conversion handler
+            SignatureHandler handler = new SignatureHandler(signConfig);
+            // setup search options
+            PdfSearchQRCodeOptions searchOptions = new PdfSearchQRCodeOptions();
+            // search only page with specified number
+            searchOptions.DocumentPageNumber = 1;
+            // specify as true to search all pages of a document
+            searchOptions.SearchAllPages = false;
+            // specify different pages to search
+            searchOptions.PagesSetup.FirstPage = true;
+            searchOptions.PagesSetup.LastPage = true;
+            searchOptions.PagesSetup.OddPages = true;
+            searchOptions.PagesSetup.EvenPages = true;
+            // specify QRCode type to search only special encode type
+            searchOptions.EncodeType = QRCodeTypes.QR;
+            // specify QRCode text to search
+            searchOptions.Text = "12345678";
+            // specify text math type
+            searchOptions.MatchType = TextMatchType.Contains;
+            // search document
+            SearchResult result = handler.Search(fileName, searchOptions);
+            // output signatures
+
+            foreach (BaseSignature signature in result.Signatures)
+            {
+                QRCodeSignature bcSignature = signature as QRCodeSignature;
+                if (bcSignature != null)
+                {
+                    Console.WriteLine("Found QRCode signature: {0} with text {1}", bcSignature.EncodeType.TypeName, bcSignature.Text);
+                }
+            }
+            //ExEnd:SearchQRCodeSignaturesInPDF
+        }
+
+
+        /// <summary>
+        /// Shows how to search  QR Code signatures in cells document
+        /// This feature is availabale in version 18.2 or greater
+        /// </summary>
+        /// <param name="fileName"></param>
+        public static void SearchQRCodeSignaturesInCells(string fileName)
+        {
+            //ExStart:SearchQRCodeSignaturesInCells
+            // setup Signature configuration
+            SignatureConfig signConfig = Utilities.GetConfigurations();
+            // instantiating the conversion handler
+            SignatureHandler handler = new SignatureHandler(signConfig);
+            // setup search options
+            CellsSearchQRCodeOptions searchOptions = new CellsSearchQRCodeOptions();
+            // search only page with specified number
+            searchOptions.DocumentPageNumber = 1;
+            // specify as true to search all pages of a document
+            searchOptions.SearchAllPages = false;
+            // specify different pages to search
+            searchOptions.PagesSetup.FirstPage = true;
+            searchOptions.PagesSetup.LastPage = true;
+            searchOptions.PagesSetup.OddPages = true;
+            searchOptions.PagesSetup.EvenPages = true;
+            // specify QRCode type to search only special encode type
+            searchOptions.EncodeType = QRCodeTypes.QR;
+            // specify QRCode text to search
+            searchOptions.Text = "12345678";
+            // specify text math type
+            searchOptions.MatchType = TextMatchType.Contains;
+            // search document
+            SearchResult result = handler.Search(fileName, searchOptions);
+            // output signatures
+            foreach (BaseSignature signature in result.Signatures)
+            {
+                QRCodeSignature bcSignature = signature as QRCodeSignature;
+                if (bcSignature != null)
+                {
+                    Console.WriteLine("Found QRCode signature: {0} with text {1}", bcSignature.EncodeType.TypeName, bcSignature.Text);
+                }
+            }
+            //ExEnd:SearchQRCodeSignaturesInCells
+        }
+
+        /// <summary>
+        /// Shows how to search QR Code signatures in images
+        /// This feature is availabale in version 18.2 or greater
+        /// </summary>
+        /// <param name="fileName"></param>
+        public static void SearchQRCodeSignaturesInImages(string fileName)
+        {
+            //ExStart:SearchQRCodeSignaturesInImages
+            // setup Signature configuration
+            SignatureConfig signConfig = Utilities.GetConfigurations();
+            // instantiating the conversion handler
+            SignatureHandler handler = new SignatureHandler(signConfig);
+            // setup search options
+            ImagesSearchQRCodeOptions searchOptions = new ImagesSearchQRCodeOptions();
+            // search only page with specified number
+            searchOptions.DocumentPageNumber = 1;
+            // specify as true to search all pages of a document
+            searchOptions.SearchAllPages = false;
+            // specify different pages to search
+            searchOptions.PagesSetup.FirstPage = true;
+            searchOptions.PagesSetup.LastPage = true;
+            searchOptions.PagesSetup.OddPages = true;
+            searchOptions.PagesSetup.EvenPages = true;
+            // specify QRCode type to search only special encode type
+            searchOptions.EncodeType = QRCodeTypes.QR;
+            // specify QRCode text to search
+            searchOptions.Text = "12345678";
+            // specify text math type
+            searchOptions.MatchType = TextMatchType.Contains;
+            // search document
+            SearchResult result = handler.Search(fileName, searchOptions);
+            // output signatures
+            foreach (BaseSignature signature in result.Signatures)
+            {
+                QRCodeSignature bcSignature = signature as QRCodeSignature;
+                if (bcSignature != null)
+                {
+                    Console.WriteLine("Found QRCode signature: {0} with text {1}", bcSignature.EncodeType.TypeName, bcSignature.Text);
+                }
+            }
+            //ExEnd:SearchQRCodeSignaturesInImages
+        }
+
+        /// <summary>
+        /// Shows how to search  QR Code signatures in slides document
+        /// This feature is availabale in version 18.2 or greater
+        /// </summary>
+        /// <param name="fileName"></param>
+        public static void SearchQRCodeSignaturesInSlides(string fileName)
+        {
+            //ExStart:SearchQRCodeSignaturesInSlides
+            // setup Signature configuration
+            SignatureConfig signConfig = Utilities.GetConfigurations();
+            // instantiating the conversion handler
+            SignatureHandler handler = new SignatureHandler(signConfig);
+            // setup search options
+            SlidesSearchQRCodeOptions searchOptions = new SlidesSearchQRCodeOptions();
+            // search only page with specified number
+            searchOptions.DocumentPageNumber = 1;
+            // specify as true to search all pages of a document
+            searchOptions.SearchAllPages = false;
+            // specify different pages to search
+            searchOptions.PagesSetup.FirstPage = true;
+            searchOptions.PagesSetup.LastPage = true;
+            searchOptions.PagesSetup.OddPages = true;
+            searchOptions.PagesSetup.EvenPages = true;
+            // specify QRCode type to search only special encode type
+            searchOptions.EncodeType = QRCodeTypes.QR;
+            // specify QRCode text to search
+            searchOptions.Text = "12345678";
+            // specify text math type
+            searchOptions.MatchType = TextMatchType.Contains;
+            // search document
+            SearchResult result = handler.Search(fileName, searchOptions);
+            // output signatures
+            foreach (BaseSignature signature in result.Signatures)
+            {
+                QRCodeSignature bcSignature = signature as QRCodeSignature;
+                if (bcSignature != null)
+                {
+                    Console.WriteLine("Found QRCode signature: {0} with text {1}", bcSignature.EncodeType.TypeName, bcSignature.Text);
+                }
+            }
+            //ExEnd:SearchQRCodeSignaturesInSlides
+        }
+
+        /// <summary>
+        /// Shows how to search  QR Code signatures in words document
+        /// This feature is availabale in version 18.2 or greater
+        /// </summary>
+        /// <param name="fileName"></param>
+        public static void SearchQRCodeSignaturesInWords(string fileName)
+        {
+            //ExStart:SearchQRCodeSignaturesInWords
+            // setup Signature configuration
+            SignatureConfig signConfig = Utilities.GetConfigurations();
+            // instantiating the conversion handler
+            SignatureHandler handler = new SignatureHandler(signConfig);
+            // setup search options
+            WordsSearchQRCodeOptions searchOptions = new WordsSearchQRCodeOptions();
+            // search only page with specified number
+            searchOptions.DocumentPageNumber = 1;
+            // specify as true to search all pages of a document
+            searchOptions.SearchAllPages = false;
+            // specify different pages to search
+            searchOptions.PagesSetup.FirstPage = true;
+            searchOptions.PagesSetup.LastPage = true;
+            searchOptions.PagesSetup.OddPages = true;
+            searchOptions.PagesSetup.EvenPages = true;
+            // specify QRCode type to search only special encode type
+            searchOptions.EncodeType = QRCodeTypes.QR;
+            // specify QRCode text to search
+            searchOptions.Text = "12345678";
+            // specify text math type
+            searchOptions.MatchType = TextMatchType.Contains;
+            // search document
+            SearchResult result = handler.Search(fileName, searchOptions);
+            // output signatures
+            foreach (BaseSignature signature in result.Signatures)
+            {
+                QRCodeSignature bcSignature = signature as QRCodeSignature;
+                if (bcSignature != null)
+                {
+                    Console.WriteLine("Found QRCode signature: {0} with text {1}", bcSignature.EncodeType.TypeName, bcSignature.Text);
+                }
+            }
+            //ExEnd:SearchQRCodeSignaturesInWords
+        }
+
+        /// <summary>
+        /// Shows how to search  Custome Object from signed PDF document
+        /// This feature is availabale in version 18.3 or greater
+        /// </summary>
+        /// <param name="fileName"></param>
+        public static void SearchCustomObjectFromSignedPDF(string fileName)
+        {
+            //ExStart:SearchCustomObjectFromSignedPDF
+            // setup Signature configuration
+            SignatureConfig signConfig = Utilities.GetConfigurations();
+            // instantiating the conversion handler
+            SignatureHandler handler = new SignatureHandler(signConfig);
+            // setup search options
+            PdfSearchQRCodeOptions searchOptions = new PdfSearchQRCodeOptions();
+            // specify as true to search all pages of a document
+            searchOptions.SearchAllPages = false;
+            // search document
+            SearchResult result = handler.Search(fileName, searchOptions);
+            // output signatures
+            foreach (BaseSignature signature in result.Signatures)
+            {
+                PdfQRCodeSignature qrCodeSignature = signature as PdfQRCodeSignature;
+                if (qrCodeSignature != null)
+                {
+                    Console.WriteLine("Found QRCode signature: {0} with text {1}", qrCodeSignature.EncodeType.TypeName, qrCodeSignature.Text);
+                    DocumentSignature docSignature = qrCodeSignature.GetData<DocumentSignature>();
+                    if (docSignature != null)
+                    {
+                        Console.WriteLine("Found DocumentSignature signature: #{0}. Author {1} from {2}. Factor: {3}",
+                          docSignature.ID, docSignature.Author, docSignature.DataFactor, docSignature.DataFactor);
+                    }
+                }
+            }
+            //ExEnd:SearchCustomObjectFromSignedPDF
+        }
+
+        /// <summary>
+        /// Shows how to search  standard  Vcard and Email object from signed PDF document
+        /// This feature is availabale in version 18.3 or greater
+        /// </summary>
+        /// <param name="fileName"></param>
+        public static void SearchStandardVCardAndEmailObjectFromSignedPDF(string fileName)
+        {
+            //ExStart:SearchStandardVCardAndEmailObjectFromSignedPDF
+            // setup Signature configuration
+            SignatureConfig signConfig = Utilities.GetConfigurations();
+            // instantiating the conversion handler
+            SignatureHandler handler = new SignatureHandler(signConfig);
+            // setup search options
+            PdfSearchQRCodeOptions searchOptions = new PdfSearchQRCodeOptions();
+            // specify as true to search all pages of a document
+            searchOptions.SearchAllPages = false;
+
+            // search document
+            SearchResult result = handler.Search(fileName, searchOptions);
+            // output signatures
+            foreach (BaseSignature signature in result.Signatures)
+            {
+                PdfQRCodeSignature qrCodeSignature = signature as PdfQRCodeSignature;
+                if (qrCodeSignature != null)
+                {
+                    Console.WriteLine("Found QRCode signature: {0} with text {1}", qrCodeSignature.EncodeType.TypeName, qrCodeSignature.Text);
+                    VCard vcard = qrCodeSignature.GetData<VCard>();
+                    if (vcard != null)
+                    {
+                        Console.WriteLine("Found VCard signature: {0} {1} from {2}. Email: {3}", vcard.FirstName, vcard.LastName, vcard.Company, vcard.Email);
+                    }
+                }
+            }
+            //ExEnd:SearchStandardVCardAndEmailObjectFromSignedPDF
+        }
+
+        /// <summary>
+        /// Shows how to encrypt Text property of QR-Code Signature in PDF document
+        /// This feature is availabale in version 18.5 or greater
+        /// </summary>
+        /// <param name="fileName"></param>
+        public static void EncryptionOfTextPropertyOfQRCodeSignature(string fileName)
+        {
+            //ExStart:EncryptionOfTextPropertyOfQRCodeSignature
+            // setup Signature configuration
+            SignatureConfig signConfig = Utilities.GetConfigurations();
+            // instantiating the conversion handler
+            SignatureHandler handler = new SignatureHandler(signConfig);
+            // setup key and passphrase
+            string key = "1234567890";
+            string salt = "1234567890";
+            // create data encryption
+            IDataEncryption encrypter = new SymmetricEncryption(SymmetricAlgorithmType.Rijndael, key, salt);
+            // setup options with text of signature
+            PdfQRCodeSignOptions signOptions = new PdfQRCodeSignOptions("This is private text to be secured.");
+            // QR-code type
+            signOptions.EncodeType = QRCodeTypes.QR;
+            // specify text encryption
+            signOptions.DataEncryption = encrypter;
+            // sign document
+            string signedPath = handler.Sign<string>(fileName, signOptions,
+                new SaveOptions { OutputType = OutputType.String, OutputFileName = "SignedQRCodeTextEncrypted.pdf" });
+            Console.WriteLine("Signed file path is: " + signedPath);
+            //ExEnd:EncryptionOfTextPropertyOfQRCodeSignature
+        }
+
+        /// <summary>
+        /// Shows how to search original text from Encrypted QRCode Signature in PDF document
+        /// This feature is availabale in version 18.5 or greater
+        /// </summary>
+        /// <param name="fileName"></param>
+        public static void SearchOriginalTextFromEncryptedQRCodeSignature(string fileName)
+        {
+            //ExStart:SearchOriginalTextFromEncryptedQRCodeSignature
+            // setup Signature configuration
+            SignatureConfig signConfig = Utilities.GetConfigurations();
+            // instantiating the conversion handler
+            SignatureHandler handler = new SignatureHandler(signConfig);
+            // setup key and pasphrase
+            string key = "1234567890";
+            string salt = "1234567890";
+            // create data encryption
+            IDataEncryption encrypter = new SymmetricEncryption(SymmetricAlgorithmType.Rijndael, key, salt);
+            // setup search options
+            PdfSearchQRCodeOptions searchOptions = new PdfSearchQRCodeOptions();
+            // specify as true to search all pages of a document
+            searchOptions.SearchAllPages = false;
+            // setup encrypter to retrieve original text
+            searchOptions.DataEncryption = encrypter;
+            // search document
+            SearchResult result = handler.Search(fileName, searchOptions);
+            // output signatures
+            foreach (BaseSignature signature in result.Signatures)
+            {
+                PdfQRCodeSignature qrCodeSignature = signature as PdfQRCodeSignature;
+                if (qrCodeSignature != null)
+                {
+                    Console.WriteLine("Found QRCode signature: {0} with text {1}", qrCodeSignature.EncodeType.TypeName, qrCodeSignature.Text);
+                }
+            }
+            //ExEnd:SearchOriginalTextFromEncryptedQRCodeSignature
+        }
+
+        /// <summary>
+        /// Shows how to sign document with custome encrypted text of QR-Code Signature in PDF document
+        /// This feature is availabale in version 18.5 or greater
+        /// </summary>
+        /// <param name="fileName"></param>
+        public static void SignedDocumentWithCustomEncryptedQRCodeText(string fileName)
+        {
+            //ExStart:SignedDocumentWithCustomEncryptedQRCodeText
+            // setup Signature configuration
+            SignatureConfig signConfig = Utilities.GetConfigurations();
+            // instantiating the conversion handler
+            SignatureHandler handler = new SignatureHandler(signConfig);
+            // create data encryption
+            IDataEncryption encrypter = new CustomXOREncryption();
+            // setup options with text of signature
+            PdfQRCodeSignOptions signOptions = new PdfQRCodeSignOptions("This is private text to be secured.");
+            // QR-code type
+            signOptions.EncodeType = QRCodeTypes.QR;
+            // specify text encryption
+            signOptions.DataEncryption = encrypter;
+            // sign document
+            string signedPath = handler.Sign<string>(fileName, signOptions,
+                new SaveOptions { OutputType = OutputType.String, OutputFileName = "SignedQRCodeTextCustomEncrypted.pdf" });
+            Console.WriteLine("Signed file path is: " + signedPath);
+            //ExEnd:SignedDocumentWithCustomEncryptedQRCodeText
+        }
+
+        /// <summary>
+        /// Shows how to sign document with custome encrypted data of QR-Code Signature in PDF document
+        /// This feature is availabale in version 18.5 or greater
+        /// </summary>
+        /// <param name="fileName"></param>
+        public static void SignedDocumentWithCustomEncryptedQRCodeData(string fileName)
+        {
+            //ExStart:SignedDocumentWithCustomEncryptedQRCodeData
+            // setup Signature configuration
+            SignatureConfig signConfig = Utilities.GetConfigurations();
+            // instantiating the conversion handler
+            SignatureHandler handler = new SignatureHandler(signConfig);
+
+
+            // setup options with text of signature
+            PdfQRCodeSignOptions signOptions = new PdfQRCodeSignOptions();
+            // QR-code type
+            signOptions.EncodeType = QRCodeTypes.QR;
+            signOptions.DataEncryption = new CustomXOREncryption();
+            // create custom object
+            DocumentSignature signature = new DocumentSignature()
+            {
+                ID = Guid.NewGuid().ToString(),
+                Author = Environment.UserName,
+                Signed = DateTime.Now,
+                DataFactor = 11.22M
+            };
+            // specify Data object instance
+            signOptions.Data = signature;
+            // sign document
+            string signedPath = handler.Sign<string>(fileName, signOptions,
+                new SaveOptions { OutputType = OutputType.String, OutputFileName = "SignedQRCodeDataEncrypted.pdf" });
+            Console.WriteLine("Signed file path is: " + signedPath);
+            //ExEnd:SignedDocumentWithCustomEncryptedQRCodeData
+        }
+
+        /// <summary>
+        /// Shows how to sign Cell document by setting position of QRcode signature in pixel 
+        /// Feature is supported in version 18.6 or greater
+        /// </summary>
+        /// <param name="fileName"></param>
+        public static void SetQRCodeSignaturePositionOnCells(string fileName)
+        {
+            //ExStart:SetQRCodeSignaturePositionOnCells
+            // setup Signature configuration
+            SignatureConfig signConfig = Utilities.GetConfigurations();
+            // instantiating the conversion handler
+            SignatureHandler handler = new SignatureHandler(signConfig);
+
+            // Specify Signature Options 
+            CellsQRCodeSignOptions signOptions = new CellsQRCodeSignOptions("012345678");
+            signOptions.Width = 100;
+            signOptions.Height = 100;
+            signOptions.Top = 15;
+            signOptions.Left = 22;
+            // sign document
+            string signedPath = handler.Sign<string>(fileName, signOptions,
+                new SaveOptions { OutputType = OutputType.String, OutputFileName = "CellsTopLeftPixels" });
+            Console.WriteLine("Signed file path is: " + signedPath);
+            //ExEnd:SetQRCodeSignaturePositionOnCells
+        }
+
+        /// <summary>
+        /// Shows how to verify QRCode in PDF without setting EncodeType
+        /// Feature is supported in version 18.6 or greater
+        /// </summary>
+        /// <param name="fileName"></param>
+        public static void VerifyQRCodeInPDFWithoutEncodeType(string fileName)
+        {
+            //ExStart:VerifyQRCodeInPDFWithoutEncodeType
+            // setup Signature configuration
+            SignatureConfig signConfig = Utilities.GetConfigurations();
+            // instantiating the conversion handler
+            SignatureHandler handler = new SignatureHandler(signConfig);
+
+            // setup verification options
+            PDFVerifyQRCodeOptions verifyOptions = new PDFVerifyQRCodeOptions("12345678");
+            // verify all pages of a document if true
+            verifyOptions.VerifyAllPages = true;
+            //verify document
+            VerificationResult result = handler.Verify(fileName, verifyOptions);
+            Console.WriteLine("Verification result is: " + result.IsValid);
+            //ExEnd:VerifyQRCodeInPDFWithoutEncodeType
+        }
+
+        /// <summary>
+        /// Shows how to verify QRCode in PDF without setting EncodeType
+        /// Feature is supported in version 18.6 or greater
+        /// </summary>
+        /// <param name="fileName"></param>
+        public static void VerifyEncryptedQRCodeInPDF(string fileName)
+        {
+            //ExStart:VerifyEncryptedQRCodeInPDF
+            // setup Signature configuration
+            SignatureConfig signConfig = Utilities.GetConfigurations();
+            // instantiating the conversion handler
+            SignatureHandler handler = new SignatureHandler(signConfig);
+
+            // setup key and pasphrase
+            string key = "1234567890";
+            string salt = "1234567890";
+            // create data encryption
+            IDataEncryption encrypter = new SymmetricEncryption(SymmetricAlgorithmType.Rijndael, key, salt);
+
+            // setup verification options
+            PDFVerifyQRCodeOptions verifyOptions = new PDFVerifyQRCodeOptions(@"This is private text to be secured.");
+            // specify as true to verify all pages of a document
+            verifyOptions.VerifyAllPages = true;
+            // setup encrypter to retrieve original text
+            verifyOptions.DataEncryption = encrypter;
+            //verify document
+            VerificationResult result = handler.Verify(fileName, verifyOptions);
+            Console.WriteLine("Verification result is: " + result.IsValid);
+            //ExEnd:VerifyEncryptedQRCodeInPDF
+        }
+
+        /// <summary>
+        /// Shows how to handle exception while verifying QRCode in PDF
+        /// Feature is supported in version 18.6 or greater
+        /// </summary>
+        /// <param name="fileName"></param>
+        public static void ExceptionHandlingWhileVerifyingQRCodeInPDF(string fileName)
+        {
+            //ExStart:ExceptionHandlingWhileVerifyingQRCodeInPDF
+            try
+            {
+                // setup Signature configuration
+                SignatureConfig signConfig = Utilities.GetConfigurations();
+                // instantiating the conversion handler
+                SignatureHandler handler = new SignatureHandler(signConfig);
+
+                // setup verification options
+                PDFVerifyQRCodeOptions verifyOptions = new PDFVerifyQRCodeOptions();
+                // verify all pages of a document if true
+                verifyOptions.VerifyAllPages = true;
+                //If verify option Text is set, it will be searched in Title, Subject and Contents
+                verifyOptions.Text = "12345678";
+                //verify document
+                VerificationResult result = handler.Verify(fileName, verifyOptions);
+                Console.WriteLine("Verification result is: " + result.IsValid);
+            }
+            catch (GroupDocs.Signature.Exception.GroupDocsSignatureException ex)
+            {
+                Console.WriteLine("GroupDocs Signature Exception: " + ex.Message);
+            }
+            catch (System.Exception ex)
+            {
+                Console.WriteLine("System Exception: " + ex.Message);
+            }
+            //ExEnd:ExceptionHandlingWhileVerifyingQRCodeInPDF
+        }
 
         #endregion
 
@@ -2637,7 +3800,7 @@ namespace GroupDocs.Signature.Examples.CSharp
             // if you need to sign all sheets set it to true
             signOptions.SignAllPages = true;
             // sign document
-            string signedPath = handler.Sign<string>("test.pdf", signOptions,
+            string signedPath = handler.Sign<string>(fileName, signOptions,
                 new SaveOptions { OutputType = OutputType.String, OutputFileName = "Pdf_Documents_Stamp" });
             Console.WriteLine("Signed file path is: " + signedPath);
             //ExEnd:AddingStampSignature
@@ -2848,8 +4011,55 @@ namespace GroupDocs.Signature.Examples.CSharp
             //ExEnd:SignWordsDocumentWithStampSignature
         }
 
+        /// <summary>
+        /// Shows how to sign Cell document by setting position of Stamp signature in pixel 
+        /// Feature is supported in version 18.6 or greater
+        /// </summary>
+        /// <param name="fileName"></param>
+        public static void SetStampSignaturePositionOnCells(string fileName)
+        {
+            //ExStart:SetStampSignaturePositionOnCells
+            // setup Signature configuration
+            SignatureConfig signConfig = Utilities.GetConfigurations();
+            // instantiating the conversion handler
+            SignatureHandler handler = new SignatureHandler(signConfig);
+
+            // Specify Signature Options 
+            CellsStampSignOptions signOptions = new CellsStampSignOptions();
+            signOptions.Height = 120;
+            signOptions.Width = 300;
+            signOptions.Top = 15;
+            signOptions.Left = 22;
+            //Inner square lines
+            StampLine line0 = new StampLine();
+            line0.Text = "John";
+            line0.TextBottomIntent = 0;
+            line0.TextColor = Color.MediumVioletRed;
+            line0.OuterBorder.Color = Color.DarkSlateBlue;
+            line0.InnerBorder.Color = Color.DarkSlateBlue;
+            line0.InnerBorder.Style = ExtendedDashStyle.Dash;
+            line0.Font.FontSize = 20;
+            line0.Font.Bold = true;
+            line0.Height = 40;
+            signOptions.InnerLines.Add(line0);
+            StampLine line1 = new StampLine();
+            line1.Text = "Smith";
+            line1.TextBottomIntent = 0;
+            line1.TextColor = Color.MediumVioletRed;
+            line1.InnerBorder.Color = Color.DarkSlateBlue;
+            line1.Font.FontSize = 20;
+            line1.Font.Bold = true;
+            line1.Height = 40;
+            signOptions.InnerLines.Add(line1);
+            // sign document
+            string signedPath = handler.Sign<string>(fileName, signOptions,
+                new SaveOptions { OutputType = OutputType.String, OutputFileName = "CellsTopLeftPixels" });
+            Console.WriteLine("Signed file path is: " + signedPath);
+            //ExEnd:SetStampSignaturePositionOnCells
+        }
         #endregion
 
+        #region WorkingWithImageDocument
 
         /// <summary>
         /// Shows how to sign Images document with Text Signature as image
@@ -3070,6 +4280,80 @@ namespace GroupDocs.Signature.Examples.CSharp
                 new SaveOptions { OutputType = OutputType.String, OutputFileName = "DocImages_Stamp" });
             Console.WriteLine("Signed file path is: " + signedPath);
             //ExEnd:SignImageDocumentWithStampSignature
+        }
+
+        /// <summary>
+        /// Shows how to sign pdf document with Stamp signature using stamp types options
+        /// This feature is availabale in version 18.3 or greater
+        /// </summary>
+        /// <param name="fileName"></param>
+        public static void SignImageWithStampSignatureUsingStampType(string ImageFileName)
+        {
+            //ExStart:SignImageWithStampSignatureUsingStampType
+            // setup Signature configuration
+            SignatureConfig signConfig = Utilities.GetConfigurations();
+            // instantiating the conversion handler
+            SignatureHandler handler = new SignatureHandler(signConfig);
+            // setup options
+            ImagesStampSignOptions signOptions = new ImagesStampSignOptions();
+            // setup other properties
+            signOptions.Top = 300;
+            signOptions.Left = 255;
+            signOptions.Height = 150;
+            signOptions.Width = 250;
+            signOptions.StampType = StampTypes.Round;
+            signOptions.ImageGuid = "stamp.jpg";
+            //Outer round lines
+            StampLine line00 = new StampLine();
+            line00.Height = 18;
+            line00.OuterBorder.Weight = 6;
+            line00.OuterBorder.Color = Color.RoyalBlue;
+            line00.InnerBorder.Weight = 6;
+            line00.InnerBorder.Color = Color.CornflowerBlue;
+            line00.BackgroundColor = Color.White;
+            signOptions.OuterLines.Add(line00);
+
+            StampLine line01 = new StampLine();
+            line01.Height = 20;
+            line01.Text = "INTERNATIONAL AIRPORT";
+            line01.TextColor = Color.CadetBlue;
+            line01.Font.FontSize = 10;
+            line01.TextBottomIntent = 5;
+            line01.InnerBorder.Weight = 1;
+            line01.InnerBorder.Color = Color.CadetBlue;
+            signOptions.OuterLines.Add(line01);
+
+            //Inner square lines
+            StampLine line02 = new StampLine();
+            line02.Text = "DEPARTURE";
+            line02.TextColor = Color.DarkRed;
+            line02.Font.FontSize = 14;
+            line02.TextBottomIntent = 10;
+            line02.Font.Bold = true;
+            line02.Height = 30;
+            signOptions.InnerLines.Add(line02);
+
+            StampLine line03 = new StampLine();
+            line03.Text = "03.03.2003";
+            line03.TextColor = Color.Brown;
+            line03.Font.FontSize = 12;
+            line03.Font.Bold = true;
+            line03.Height = 20;
+            signOptions.InnerLines.Add(line03);
+
+            // sign document with round stamp
+            string signedPath = handler.Sign<string>(ImageFileName, signOptions,
+                new SaveOptions { OutputType = OutputType.String, OutputFileName = "DocImages_StampRound" });
+
+            //change type of stamp
+            signOptions.StampType = StampTypes.Square;
+
+            // sign document with square stamp
+            signedPath = handler.Sign<string>(ImageFileName, signOptions,
+                new SaveOptions { OutputType = OutputType.String, OutputFileName = "DocImages_StampSquare" });
+
+            Console.WriteLine("Signed file path is: " + signedPath);
+            //ExEnd:SignImageWithStampSignatureUsingStampType
         }
 
         /// <summary>
@@ -3414,6 +4698,8 @@ namespace GroupDocs.Signature.Examples.CSharp
             Console.WriteLine("Signed file path is: " + signedPath);
             //ExEnd:ExportCellsDocumentAsMultiPageTiff
         }
+        #endregion
+
         /// <summary>
         /// Sign PDF with Signature Process Event
         /// Feature is supported in versin 17.11 or greater
@@ -3456,6 +4742,47 @@ namespace GroupDocs.Signature.Examples.CSharp
         }
 
         /// <summary>
+        /// Sign PDF with Extended Signature Process Event
+        /// Feature is supported in versin 18.1 or greater
+        /// </summary>
+        /// <param name="fileName"></param>
+        public static void SignDocumentWithExtendedSignatureProcessEvents(string fileName)
+        {
+            //ExStart:SignDocumentWithExtendedSignatureProcessEvents
+
+            // setup Signature configuration
+            SignatureConfig signConfig = Utilities.GetConfigurations();
+            // instantiating the conversion handler
+            SignatureHandler handler = new SignatureHandler(signConfig);
+
+            // setup signature option
+            PdfSignTextOptions signOptions = new PdfSignTextOptions("John Smith");
+            // text rectangle size
+            signOptions.Height = 100;
+            signOptions.Width = 100;
+            signOptions.SignAllPages = true;
+            //
+            SaveOptions saveOptions = new SaveOptions { OutputType = OutputType.String, OutputFileName = "Process_Events" };
+            //
+            handler.SignatureStarted += delegate (object sender, ProcessStartEventArgs args)
+            {
+                Console.WriteLine("Processing of {0} signatures for {1} started at {2}", args.TotalSignatures, args.Guid, args.Started.ToString("f"));
+            };
+            handler.SignatureProgress += delegate (object sender, ProcessProgressEventArgs args)
+            {
+                Console.WriteLine("Singing of {0} progress: {1} %. Processed {2} signatures. Since start process spent {3} mlsec", args.Guid, args.Progress, args.ProcessedSignatures, args.Ticks);
+            };
+            handler.SignatureCompleted += delegate (object sender, ProcessCompleteEventArgs args)
+            {
+                Console.WriteLine("Singing of {0} completed at {1}. Processing of {2} signatures took {3} mlsec", args.Guid, args.Completed.ToString("f"), args.TotalSignatures, args.Ticks);
+            };
+            // sign document
+            string signedPath = handler.Sign<string>(fileName, signOptions, saveOptions);
+            Console.WriteLine("Signed file path is: " + signedPath);
+            //ExEnd:SignDocumentWithExtendedSignatureProcessEvents
+        }
+
+        /// <summary>
         /// Verify PDF with Verification Process Event
         /// Feature is supported in versin 17.11 or greater
         /// </summary>
@@ -3491,6 +4818,60 @@ namespace GroupDocs.Signature.Examples.CSharp
             VerificationResult result = handler.Verify(fileName, verifyOptions);
             Console.WriteLine("Verification result: " + result.IsValid);
             //ExEnd:VerifyDocumentWithVerificationProcessEvents
+        }
+
+        /// <summary>
+        /// Search Barcode Signatures With Process Event
+        /// Feature is supported in versin 18.2 or greater
+        /// </summary>
+        /// <param name="fileName"></param>
+        public static void SearchBarcodeSignatureWithProcessEvents(string fileName)
+        {
+            //ExStart:SearchBarcodeSignatureWithProcessEvents
+
+            // setup Signature configuration
+            SignatureConfig signConfig = Utilities.GetConfigurations();
+            // instantiating the conversion handler
+            SignatureHandler handler = new SignatureHandler(signConfig);
+            // setup search option
+            PdfSearchBarcodeOptions signOptions = new PdfSearchBarcodeOptions();
+            // setup search for all pages
+            signOptions.SearchAllPages = true;
+            // setup Barcode encode type if required
+            signOptions.EncodeType = BarcodeTypes.Code128;
+            // setup Barcode Text if required
+            signOptions.Text = "123";
+            // setup Text Match type if required
+            signOptions.MatchType = TextMatchType.StartsWith;
+            //
+            handler.SearchStarted += delegate (object sender, ProcessStartEventArgs args)
+            {
+                Console.WriteLine("Search started for {0}-page(s) in Document {1} started at {2}",
+                         args.TotalSignatures, args.Guid, args.Started.ToString("f"));
+            };
+            handler.SearchProgress += delegate (object sender, ProcessProgressEventArgs args)
+            {
+                Console.WriteLine("Search {0} progress: {1} %. Processed {2} pages. Since start process spent {3} mlsec",
+                        args.Guid, args.Progress, args.ProcessedSignatures, args.Ticks);
+            };
+            handler.SearchCompleted += delegate (object sender, ProcessCompleteEventArgs args)
+            {
+                Console.WriteLine("Search {0} completed at {1}. Processing of {2} pages took {3} mlsec",
+                        args.Guid, args.Completed.ToString("f"), args.TotalSignatures, args.Ticks);
+            };
+            // sign document
+            SearchResult searchResult = handler.Search(fileName, signOptions);
+            // output signatures
+            foreach (BaseSignature signature in searchResult.Signatures)
+            {
+                BarcodeSignature bcSignature = signature as BarcodeSignature;
+                if (bcSignature != null)
+                {
+                    Console.WriteLine("Found Barcode signature: {0} with text {1}",
+                        bcSignature.EncodeType.TypeName, bcSignature.Text);
+                }
+            }
+            //ExEnd:SearchBarcodeSignatureWithProcessEvents
         }
 
         /// <summary>
@@ -3642,6 +5023,144 @@ namespace GroupDocs.Signature.Examples.CSharp
             }
            
             //ExEnd:EnumerateAllOptionsInsideCollection
+        }
+
+        #region working with Brushes
+
+        /// <summary>
+        /// Set up Solid Brush for signature background in PDF
+        /// Feature is supported in versin 18.2 or greater
+        /// </summary>
+        /// <param name="fileName"></param>
+        public static void SetupSolidBrushForSignatureBackground(string fileName)
+        {
+            //ExStart:SetupSolidBrushForSignatureBackground
+
+            // setup Signature configuration
+            SignatureConfig signConfig = Utilities.GetConfigurations();
+            // instantiating the conversion handler
+            SignatureHandler handler = new SignatureHandler(signConfig);
+            // set up options with text of signature
+            PdfSignTextOptions signOptions = new PdfSignTextOptions("John Smith");
+            signOptions.Width = 100;
+            signOptions.Height = 100;
+
+            // set up brush for signature background
+            Rectangle rectBrush = new Rectangle(0, 0, signOptions.Width, signOptions.Height);
+            GroupDocs.Signature.Domain.Extensions.Brush userBrushStyle = new Domain.Extensions.SolidBrush(Color.OrangeRed);
+
+            signOptions.BackgroundBrushStyle = userBrushStyle;
+
+            // sign document
+            string signedPath = handler.Sign<string>(fileName, signOptions,
+            new SaveOptions { OutputType = OutputType.String, OutputFileName = "Solid_Brush" });
+            //ExEnd:SetupSolidBrushForSignatureBackground
+        }
+
+        /// <summary>
+        /// Set up Linear Grdiant Brush for signature background in Cells
+        /// Feature is supported in versin 18.2 or greater
+        /// </summary>
+        /// <param name="fileName"></param>
+        public static void SetupLinearGrdiantBrushForSignatureBackground(string fileName)
+        {
+            //ExStart:SetupLinearGrdiantBrushForSignatureBackground
+
+            // setup Signature configuration
+            SignatureConfig signConfig = Utilities.GetConfigurations();
+            // instantiating the conversion handler
+            SignatureHandler handler = new SignatureHandler(signConfig);
+            // setup options with text of signature
+            CellsSignTextOptions signOptions = new CellsSignTextOptions("John Smith");
+            // text rectangle size
+            signOptions.Height = 100;
+            signOptions.Width = 100;
+            //brush for signature background
+            Rectangle rectBrush = new Rectangle(0, 0, signOptions.Width, signOptions.Height);
+
+            //Actual property is BackgroundBrushStyle.
+            //This feature is available from version 18.02.
+            Domain.Extensions.Brush userBrushStyle =
+                new LinearGradientBrush() { StartColor = Color.Yellow, EndColor = Color.OrangeRed, Angle = 75 };
+            signOptions.BackgroundBrushStyle = userBrushStyle;
+            // sign document
+            string signedPath = handler.Sign<string>(fileName, signOptions,
+                new SaveOptions { OutputType = OutputType.String, OutputFileName = "Cells_Gradient_Brash" });
+            Console.WriteLine("Signed file path is: " + signedPath);
+            //ExEnd:SetupLinearGrdiantBrushForSignatureBackground
+        }
+
+        /// <summary>
+        /// Set up Radial Grdiant Brush for signature background in PDF
+        /// Feature is supported in versin 18.2 or greater
+        /// </summary>
+        /// <param name="fileName"></param>
+        public static void SetupRadialGrdiantBrushForSignatureBackground(string fileName)
+        {
+            //ExStart:SetupRadialGrdiantBrushForSignatureBackground
+
+            // setup Signature configuration
+            SignatureConfig signConfig = Utilities.GetConfigurations();
+            // instantiating the conversion handler
+            SignatureHandler handler = new SignatureHandler(signConfig);
+            // set up options with text of signature
+            PdfSignTextOptions signOptions = new PdfSignTextOptions("John Smith");
+            signOptions.Width = 100;
+            signOptions.Height = 100;
+            signOptions.SignatureImplementation = PdfTextSignatureImplementation.Image;
+
+            // set up brush for signature background
+            var userBrushStyle = new RadialGradientBrush(Color.OrangeRed, Color.Yellow);
+
+            signOptions.BackgroundBrushStyle = userBrushStyle;
+
+            // sign document
+            string signedPath = handler.Sign<string>(fileName, signOptions,
+            new SaveOptions { OutputType = OutputType.String, OutputFileName = "RadialGradient_Brush" });
+            Console.WriteLine("Signed file path is: " + signedPath);
+            //ExEnd:SetupRadialGrdiantBrushForSignatureBackground
+        }
+
+        /// <summary>
+        /// Set up Texture Brush for signature background in Slides
+        /// Feature is supported in versin 18.2 or greater
+        /// </summary>
+        /// <param name="fileName"></param>
+        public static void SetupTextureBrushForSignatureBackground(string fileName)
+        {
+            //ExStart:SetupTextureBrushForSignatureBackground
+
+            // setup Signature configuration
+            SignatureConfig signConfig = Utilities.GetConfigurations();
+            // instantiating the conversion handler
+            SignatureHandler handler = new SignatureHandler(signConfig);
+            // set up options with text of signature
+            SlidesSignTextOptions signOptions = new SlidesSignTextOptions("John Smith");
+            signOptions.Width = 100;
+            signOptions.Height = 100;
+            
+            var userBrushStyle = new Domain.Extensions.TextureBrush(Utilities.imagePath+"/sign.png");
+            signOptions.BackgroundBrushStyle = userBrushStyle;
+            // sign document
+            string signedPath = handler.Sign<string>(fileName, signOptions,
+            new SaveOptions { OutputType = OutputType.String, OutputFileName = "Texture_Brush" });
+            //ExEnd:SetupTextureBrushForSignatureBackground
+        }
+
+        #endregion
+
+    }
+
+    internal class CustomXOREncryption : IDataEncryption
+    {
+        public string Decode(string source)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string Encode(string source)
+        {
+            throw new NotImplementedException();
         }
     }
 }
